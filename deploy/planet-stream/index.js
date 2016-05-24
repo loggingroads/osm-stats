@@ -22,7 +22,7 @@ var redis = new Redis({
 });
 var toGeojson = require('./lib/toGeojson.js');
 
-var tracked = ['#missingmaps'];
+var tracked = ['#logging-roads'];
 
 // parse comments into hashtag list
 function getHashtags (str) {
@@ -52,7 +52,7 @@ function addToKinesis(obj) {
       redis.ltrim('osmstats::map::' + hashtag, 0, 100);
 
       // Add to forgettable
-      if (R.match(/missingmaps/, R.toLower(hashtag)).length === 0) {
+      if (R.match(/logging\-roads/, R.toLower(hashtag)).length === 0) {
         request('http://' + forgettable_host + ':' + forgettable_port +
                      '/incr?distribution=hashtags&field=' + R.slice(1, Infinity, hashtag) + '&N=10').then(function (result) {
         }).catch(function (error) {
