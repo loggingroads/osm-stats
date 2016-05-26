@@ -174,7 +174,7 @@ if __name__ == "__main__":
         zfile = '%s/%s.zip' % (repo, repo)
         func = create_function(args.name, zfile, update=True)
         print func
-        host_string = 'ec2-user@%s:22' % envs['EC2_URL']
+        host_string = 'ec2-user@%s:22' % envs['EC2_URL'].rstrip()
         deploy_to_ec2(args.name, host_string, logfile)
         print '%s: Completed updating of %s' % (timestamp(), args.name)
 
