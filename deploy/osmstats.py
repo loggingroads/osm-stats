@@ -21,7 +21,7 @@ def clone_workers_repo(logfile=None):
         logfile = open(os.devnull, 'w')
     repo = 'osm-stats-workers'
     print '%s: Fetching latest %s repository' % (timestamp(), repo)
-    repo_url = 'https://github.com/AmericanRedCross/%s.git' % repo
+    repo_url = 'https://github.com/LoggingRoads/%s.git' % repo
     if os.path.exists(repo):
         shutil.rmtree(repo)
     subprocess.call(['git', 'clone', '-bgh-pages', repo_url], stdout=logfile, stderr=logfile)
