@@ -76,7 +76,7 @@ function addToKinesis(obj) {
         if (err) log.error(err);
         else {
           log.info('Added ' + obj.metadata.id);
-          log.debug('object:' + data);
+          log.debug('object:' + JSON.stringify(data));
         }
       });
     } else {
@@ -111,6 +111,7 @@ if (process.env.SIMULATION) {
     if (!data.metadata || !data.metadata.comment) {
       return false;
     }
+    log.debug('id: ' + data.metadata.id + ' - Comment: ' + data.matadata.comment);
     data.metadata.comment = R.toLower(data.metadata.comment);
     var hashtags = getHashtags(data.metadata.comment);
     if (process.env.ALL_HASHTAGS) {
