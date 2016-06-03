@@ -18,9 +18,9 @@ def copy_files():
     """ Copy Docker files to host """
     put('.env', '~/', use_sudo=True)
     put('docker-compose.yml', '~/', use_sudo=True)
-    put('osm-stats-api', '~/', use_sudo=True)
-    put('planet-stream', '~/', use_sudo=True)
-    put('forgettable', '~/', use_sudo=True)
+    #put('osm-stats-api', '~/', use_sudo=True)
+    #put('planet-stream', '~/', use_sudo=True)
+    #put('forgettable', '~/', use_sudo=True)
 
 
 def deploy():

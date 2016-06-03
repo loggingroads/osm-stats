@@ -7,14 +7,14 @@ redis:
   volumes_from:
     - redis_data
 stream:
-  build: ./planet-stream
+  image: quay.io/loggingroads/planet-stream:latest
   env_file: .env
   links:
     - redis
     - forgettable
   log_driver: syslog
 api:
-  build: ./osm-stats-api
+  image: quay.io/loggingroads/osm-stats-api:latest
   links:
     - redis
     - forgettable
@@ -23,7 +23,7 @@ api:
   env_file: .env
   log_driver: syslog
 forgettable:
-  build: ./forgettable
+  image: quay.io/loggingroads/forgettable:latest
   ports:
     - 8080:8080
   links:
