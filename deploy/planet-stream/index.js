@@ -111,7 +111,7 @@ if (process.env.SIMULATION) {
     if (!data.metadata || !data.metadata.comment) {
       return false;
     }
-    log.debug('id: ' + data.metadata.id + ' - Comment: ' + data.matadata.comment);
+    log.debug('id: ' + data.metadata.id + ' - Comment: ' + data.metadata.comment);
     data.metadata.comment = R.toLower(data.metadata.comment);
     var hashtags = getHashtags(data.metadata.comment);
     if (process.env.ALL_HASHTAGS) {
