@@ -111,6 +111,12 @@ if __name__ == "__main__":
     parser = subparser.add_parser('update', help='Update OSM Stats with latest code')
     parser.add_argument('--name', help='Base name of deployment', default='osmstats')
 
+    parser = subparser.add_parser('update-lambda', help='Update OSM Stats Worker')
+    parser.add_argument('--name', help='Base name of deployment', default='osmstats')
+
+    parser = subparser.add_parser('update-ec2', help='Update OSM Stats Services')
+    parser.add_argument('--name', help='Base name of deployment', default='osmstats')
+
     args = parser0.parse_args()
 
     logfile = open('%s.log' % args.name, 'w')
@@ -187,6 +193,26 @@ if __name__ == "__main__":
         zfile = '%s/%s.zip' % (repo, repo)
         func = create_function(args.name, zfile, update=True)
         print func
+        host_string = 'ec2-user@%s:22' % envs['EC2_URL'].rstrip()
+        redeploy_to_ec2(args.name, host_string, logfile)
+        print '%s: Completed updating of %s' % (timestamp(), args.name)
+
+    if args.command == 'update-lambda':
+        print '%s: Starting updating of %s' % (timestamp(), args.name)
+        envs = read_envs(args.name)
+        repo = clone_workers_repo(logfile)
+        # update database
+        os.environ['DATABASE_URL'] = envs['DATABASE_URL']
+        migrate_database(repo, logfile, seed=False)
+        add_env(args.name, repo, logfile)
+        # update lambda function
+        zfile = '%s/%s.zip' % (repo, repo)
+        func = create_function(args.name, zfile, update=True)
+        print func
+
+    if args.command == 'update-ec2':
+        print '%s: Starting updating of %s' % (timestamp(), args.name)
+        envs = read_envs(args.name)
         host_string = 'ec2-user@%s:22' % envs['EC2_URL'].rstrip()
         redeploy_to_ec2(args.name, host_string, logfile)
         print '%s: Completed updating of %s' % (timestamp(), args.name)
