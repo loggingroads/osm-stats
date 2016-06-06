@@ -40,12 +40,15 @@ function getHashtags (str) {
 }
 function addToKinesis(obj) {
   var data = JSON.stringify(obj);
-  var geo = toGeojson(obj.elements);
-  geo.properties = obj.metadata;
   log.debug('[kinesis obj metadata]:' + obj.metadata);
+  var geo = null;
+  if (obj.elements) {
+    geo = toGeojson(obj.elements);
+  }
 
   // Only add if there are features
-  if (geo.features.length) {
+  if (geo && geo.features.length) {
+    geo.properties = obj.metadata;
     var hashtags = getHashtags(obj.metadata.comment);
     hashtags.forEach(function (hashtag) {
       redis.lpush('osmstats::map::' + hashtag, JSON.stringify(geo));
