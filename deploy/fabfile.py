@@ -26,5 +26,6 @@ def copy_files():
 def deploy():
     """ Deploy docker containers """
     run('docker-compose down')
+    run('docker-compose pull')
     run('docker-compose build')
     run('docker-compose up -d')
