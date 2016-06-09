@@ -38,11 +38,11 @@ function getHashtags (str) {
   });
   return hashlist;
 }
-function addToKinesis(obj) {
+function addToKinesis (obj) {
   var data = JSON.stringify(obj);
   log.debug('[kinesis obj metadata]:' + obj.metadata);
   var geo = null;
-  if (obj.elements) {
+  if (obj.elements && obj.elements.length > 0) {
     geo = toGeojson(obj.elements);
   }
 
@@ -76,8 +76,9 @@ function addToKinesis(obj) {
         StreamName: process.env.KINESIS_STREAM
       };
       kinesis.kin.putRecord(dataParams, function (err, data) {
-        if (err) log.error(err);
-        else {
+        if (err) {
+          log.error(err);
+        } else {
           log.info('Added ' + obj.metadata.id);
           log.debug('object:' + JSON.stringify(data));
         }
@@ -98,9 +99,7 @@ if (process.env.SIMULATION) {
     var changeset = simulation.randomChangeset();
     addToKinesis(changeset);
   }, 1000);
-
 } else {
-
   // Start planet-stream
   var diffs = require('planet-stream')({
     limit: process.env.LIMIT || 25,
@@ -125,5 +124,4 @@ if (process.env.SIMULATION) {
   })
   // add a complete record to kinesis
   .onValue(addToKinesis);
-
 }
